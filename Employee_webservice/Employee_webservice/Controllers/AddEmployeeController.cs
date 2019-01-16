@@ -15,8 +15,6 @@ namespace Employee_webservice.Controllers
             Console.WriteLine("In registerStudent");
             EmployeeRegistrationReply empregreply = new EmployeeRegistrationReply();
             EmployeeRegistration.getInstance().Add(empregd);
-
-
             empregreply.firstName = empregd.firstName;
             empregreply.lastName = empregd.lastName;
             empregreply.Email = empregd.Email;
