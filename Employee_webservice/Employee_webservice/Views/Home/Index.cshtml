@@ -42,7 +42,7 @@
         <h2>Delete Employee by ID</h2>
         <p>
             Employee Id:
-            <input type="text" name="empId" id="empid" />
+            <input type="text" name="empId" id="empid_del" />
         </p>
         <p><input class="btn btn-default" type="button" id="delete" value="Delete >>" /></p>
     </div>
@@ -126,7 +126,7 @@
         }
 
         $('#delete').click(function () {
-            var empId = $('#empid').val();
+            var empId = $('#empid_del').val();
             //uri_delete = 'employee/delete/' + empId;
             
             deleteEmp(empId.toString());
