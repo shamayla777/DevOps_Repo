@@ -13,7 +13,40 @@ namespace Employee_webservice.Controllers
     {
         public List<Employees> GetAllEmployee()
         {
-            return EmployeeRegistration.getInstance().getAllEmployees();
+            //if (EmployeeRegistration.getInstance().getAllEmployees() == null)
+            //{
+            //    return new List<Employees>
+            //{
+            //    new Employees
+            //    {
+            //        firstName = "Glenn",
+            //        lastName = "Block",
+            //        Email = "",
+            //        HireDate = "03/04/2018",
+            //        Salary = 8900,
+            //        DepartmentName = "QA",
+            //        EmployeeID = 777
+
+            //    },
+            //    new Employees
+            //    {
+            //        firstName = "Dan",
+            //        lastName = "Roth",
+            //        Email = "",
+            //        HireDate = "03/02/2018",
+            //        Salary = 89000,
+            //        DepartmentName = "QA II",
+            //        EmployeeID = 333
+            //    }
+
+            //};
+            //}
+            //else
+            //{
+                Console.WriteLine("Get method is called");
+                return EmployeeRegistration.getInstance().getAllEmployees();
+            //}
+            
         }
     }
 }

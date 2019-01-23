@@ -1,24 +1,163 @@
 ﻿<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS, and JavaScript.</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+    <h1>Employee Form</h1>
 </div>
 <div class="row">
     <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>ASP.NET Web API is a framework that makes it easy to build HTTP services that reach
-        a broad range of clients, including browsers and mobile devices. ASP.NET Web API
-        is an ideal platform for building RESTful applications on the .NET Framework.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301870">Learn more &raquo;</a></p>
+        <h2>All Employees</h2>
+        <ul id="employees"></ul>
     </div>
     <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301871">Learn more &raquo;</a></p>
+        <h2>Create a new Employee</h2>
+        <p>
+            Employee Id:
+            <input type="text" name="Id" id="empid" />
+        </p>
+        <p>
+            First Name:
+            <input type="text" name="fName" id="fname" />
+        </p>
+        <p>
+            Last Name:
+            <input type="text" name="lName" id="lname" />
+        </p>
+        <p>
+            Hire Date:
+            <input type="text" name="hireDate" id="hiredate" />
+        </p>
+        <p>
+            Department Name:
+            <input type="text" name="DepartmentName" id="departmentname" />
+        </p>
+        <p>
+            Salary:
+            <input type="text" name="Salary" id="salary" />
+        </p>
+        <p>
+            Email:
+            <input type="text" name="Email" id="email" />
+        </p>
+        <p><input class="btn btn-default" type="button" id="save" value="Save >>" /></p>
     </div>
     <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301872">Learn more &raquo;</a></p>
+        <h2>Delete Employee by ID</h2>
+        <p>
+            Employee Id:
+            <input type="text" name="empId" id="empid" />
+        </p>
+        <p><input class="btn btn-default" type="button" id="delete" value="Delete >>" /></p>
     </div>
 </div>
+
+@section scripts{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $.getJSON(uri_get)
+                .done(function (data) {
+                    $('#employees').empty();
+                    $.each(data, function (key, record) {
+                        $('#employees').append(
+                            "<li>"
+                            + "<br> Employee ID: " + record.EmployeeID + ""
+                            + "<br> Name: " + record.firstName + " " + record.lastName + ""
+                            + "<br> Hire Date: " + record.HireDate + ""
+                            + "<br> Salary: " + record.Salary + ""
+
+                            + "</li>");
+                    });
+                });
+
+        });
+        var Employee = {
+                    firstName: "",
+                    lastName: "",
+                    Email: "",
+                    HireDate: "",
+                    Salary: 0,
+                    DepartmentName: "",
+                    EmployeeID: 0
+        };
+        var uri_post = 'api/addemployee';
+        var uri_get = 'api/getemployee';
+        //var uri_delete = 'employee/delete/{employeeID}';
+        var uri_delete = 'employee/delete/';
+        $('#save').click(function () {
+
+            Employee = new Object();
+            Employee.EmployeeID = $("#empid").val();
+            Employee.firstName = $("#fname").val();
+            Employee.lastName = $("#lname").val();
+            Employee.HireDate = $("#hiredate").val();
+            Employee.DepartmentName = $("#departmentname").val();
+            Employee.Email = $("email").val();
+            Employee.Salary = $("salary").val();
+            addemp(Employee);
+        });
+       
+        function addemp(employee) {
+
+            $.ajax({
+                url: uri_post,
+                type: 'POST',
+                contentType: "application/json;charset=utf-8",
+                data: JSON.stringify(employee),
+                success: function () {
+
+                    $.getJSON(uri_get)
+                        .done(function (data) {
+                            $('#employees').empty();
+                            $.each(data, function (key, record) {
+                                $('#employees').append(
+                                    "<li>"
+                                    + "<br> Employee ID: " + record.EmployeeID + ""
+                                    + "<br> Name: " + record.firstName + " " + record.lastName + ""
+                                    + "<br> Hire Date: " + record.HireDate + ""
+                                    + "<br> Salary: " + record.Salary + ""
+                                   
+                                    + "</li>");
+                            });
+                        });
+                },
+                error: function (request, message, error) {
+                    handleException(request, message, error);
+                }
+            });
+        }
+
+        $('#delete').click(function () {
+            var empId = $('#empid').val();
+            //uri_delete = 'employee/delete/' + empId;
+            
+            deleteEmp(empId.toString());
+
+        });
+        function deleteEmp(empID) {
+            $.ajax({
+                url: uri_delete + empID,
+                type: 'DELETE',
+                contentType: "application/json;charset=utf-8",
+                success: function () {
+                    $.getJSON(uri_get)
+                        .done(function (data) {
+                            $('#employees').empty();
+                            $.each(data, function (key, record) {
+                                $('#employees').append(
+                                    "<li>"
+                                    + "<br> Employee ID: " + record.EmployeeID + ""
+                                    + "<br> Name: " + record.firstName + " " + record.lastName + ""
+                                    + "<br> Hire Date: " + record.HireDate + ""
+                                    + "<br> Salary: " + record.Salary + ""
+
+                                    + "</li>");
+                            });
+                        });
+                },
+                error: function (request, message, error) {
+                    handleException(request, message, error);
+                }
+            });
+        }
+    </script>
+}
+

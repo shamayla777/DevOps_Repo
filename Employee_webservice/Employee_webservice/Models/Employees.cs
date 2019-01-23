@@ -28,8 +28,8 @@ namespace Employee_webservice.Models
             set { email = value; }
         }
 
-        int hireDate;
-        public int HireDate
+        String hireDate;
+        public String HireDate
         {
             get { return hireDate; }
             set { hireDate = value; }

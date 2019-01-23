@@ -11,7 +11,7 @@ namespace Employee_webservice.Controllers
     public class DeleteEmployeeController : ApiController
     {
         [Route("employee/delete/{employeeID}")]
-
+       // [Route("api/deleteemployee/{employeeID}")]
         public String DeleteEmployee(String employeeID)
         {
             Console.WriteLine("In deleteEmployeeRecord");
