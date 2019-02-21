@@ -1,6 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿//using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Remote;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,28 +9,30 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TechTalk.SpecFlow;
+using NUnit.Framework;
 
 namespace SpecflowTest.Steps
 {
     [Binding]
     public class ui_tests_steps
     {
-
-        ChromeDriver driver = new ChromeDriver();
+        string uri = "http://10.148.85.159:4444/wd/hub/";
+        RemoteWebDriver driver = null;
+        //ChromeDriver driver = new ChromeDriver();
+        private void init_driver_chrome()
+        {
+            var caps = new ChromeOptions().ToCapabilities();
+            var commandTimeOut = TimeSpan.FromMinutes(5);
+            driver = new RemoteWebDriver(new Uri(uri), caps, commandTimeOut);
+        }
         [Given(@"I navigate to my main page")]
         public void GivenINavigateToMyMainPage()
         {
+            init_driver_chrome();
             driver.Navigate().GoToUrl("http://localhost:52650/");
             driver.Manage().Window.Maximize();
             Thread.Sleep(2000);
         }
-
-        //[When(@"I click on Create New Employee link")]
-        //public void WhenIClickOnCreateNewEmployeeLink()
-        //{
-        //    driver.FindElement(By.XPath("/html/body/p/a")).Click();
-        //    Thread.Sleep(2000);
-        //}
 
         [When(@"I enter valid Employee Information")]
         public void WhenIEnterValidEmployeeInformation()
@@ -61,7 +64,6 @@ namespace SpecflowTest.Steps
         [When(@"I enter valid Employee ID")]
         public void WhenIEnterValidEmployeeID()
         {
-            //ScenarioContext.Current.Pending();
             driver.FindElement(By.XPath("//*[@id='empid_del']")).SendKeys("777");
             Thread.Sleep(2000);
         }
@@ -76,10 +78,10 @@ namespace SpecflowTest.Steps
         [Then(@"I should not see employee in the list")]
         public void ThenIShouldNotSeeEmployeeInTheList()
         {
-            IWebElement label = driver.FindElement(By.XPath("//*[@id='employees']/li[1]"));
+            IWebElement label = driver.FindElement(By.XPath("//*[@id='employees']"));
             String labelText = label.Text;
             //labelText = labelText.Substring(13, 3);
-            if (labelText != "777")
+            if (!labelText.Contains("777"))
             {
                 Console.WriteLine("Passed");
             }
@@ -87,21 +89,7 @@ namespace SpecflowTest.Steps
             {
                 Assert.Fail();
             }
-            //ScenarioContext.Current.Pending();
         }
-
-        //[Then(@"I should be on the main page again")]
-        //public void ThenIShouldBeOnTheMainPageAgain()
-        //{
-        //    IWebElement newEmpBtn = driver.FindElement(By.XPath("/html/body/p/a"));
-        //    if (newEmpBtn != null)
-        //    {
-        //        Console.WriteLine("Passed");
-        //    } else
-        //    {
-        //        Assert.Fail();
-        //    }
-        //}
 
     }
 }
