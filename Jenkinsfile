@@ -19,7 +19,8 @@ pipeline {
         }
 		stage('RunTest') {
             steps {
-                bat '"C:/Program Files (x86)/NUnit.org/nunit-console/nunit3-console.exe" "C:/Program Files (x86)/Jenkins/workspace/DevOps_Pipeline/DevOps_Automation/DevOps_Automation/bin/Release/DevOps_UnitTest.dll"'
+                bat '"C:/Program Files (x86)/NUnit.org/nunit-console/nunit3-console.exe"'
+				bat '"C:/Program Files (x86)/Jenkins/workspace/DevOps_Pipeline/DevOps_Automation/DevOps_Automation/bin/Release/DevOps_UnitTest.dll"'
             }
         }
 		stage("PublishTestReport"){
